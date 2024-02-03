@@ -16,6 +16,8 @@
   .flex.items-center
     input.bg-gray-50.text-gray-600.px-2.mr-2.flex-1.rounded-sm(:value="shareUrl")
     NButton(size="small" @click="copy(shareUrl)") 复制
+  p.mb-3 种子sha256：{{ status.hash }}
+    
 
 
 </template>
@@ -42,6 +44,7 @@ async function createSeed(){
   }).then(rsp=>rsp.json())
   status.loading = false
   status.id = res.id
+  status.hash = res.hash
   window.localStorage.setItem('lastRngId',res.id)
 }
 

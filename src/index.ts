@@ -35,14 +35,28 @@ app.use('/api/*', async (c, next) => {
 app.post('/api/newSeed', async (c) => {
   const { stamp } = await c.req.json<Omit<SeedHash, 'id'>>();
   const seed = su.generate();
+  const myText = new TextEncoder().encode(seed);
+  const digest = await crypto.subtle.digest(
+    {
+      name: 'SHA-256',
+    },
+    myText 
+  );
+
+  const hexString = [...new Uint8Array(digest)]
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
+ 
   const query = fql`SeedHash.create({
     seed: ${seed},
     stamp: ${stamp},
+    hash: ${hexString}
   })`;
   const result = await c.var.faunaClient.query<SeedHash>(query);
   return c.json({
     id:result.data.id,
     stamp:result.data.stamp,
+    hash:hexString
   });
 });
 

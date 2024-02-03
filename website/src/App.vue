@@ -4,6 +4,7 @@ NConfigProvider(:theme="darkTheme" :locale="zhCN" :date-locale="dateZhCN")
   .mb-10(v-if="seedDetail.error") ❌{{ seedDetail.error }}
   template(v-if="seedDetail.id")
     .mb-2.flex  种子id：{{ seedDetail.id }}
+    .mb-2.flex(v-if="seedDetail.hash") SHA-256：{{ seedDetail.hash }}
     .mb-3.flex  {{ dateText }}
     template(v-if="seedDetail.seed")
       .mb-10.flex  种子为:{{ seedDetail.seed }}
